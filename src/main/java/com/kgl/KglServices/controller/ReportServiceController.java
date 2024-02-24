@@ -29,7 +29,7 @@ public class ReportServiceController {
 
 	@GetMapping({ "/test" })
 	public String test() {
-		return "hi";
+		return "hi kgl services added";
 	}
 
 	@GetMapping({ "/aadharData" })
