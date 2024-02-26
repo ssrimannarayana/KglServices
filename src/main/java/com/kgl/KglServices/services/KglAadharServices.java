@@ -1,6 +1,7 @@
 package com.kgl.KglServices.services;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -50,8 +51,7 @@ public class KglAadharServices {
 		boolean status = false;
 		Connection conn = null;
 		try {
-			
-			conn = MssqlConnection.getCon(dbURL, userName, passWord);
+			conn = getMssqlConnection(dbURL, userName, passWord);
 			if (conn != null) {
 				List<String> list = getGoogleSeetData(aADHAR_dATA_rEST_API);
 				if (list.size() > 0) {
@@ -60,13 +60,25 @@ public class KglAadharServices {
 						status = UpdateIntoGoogleSheet(aadharList,aADHAR_dATA_API_UPDATE);
 				}
 			}
+			conn.close();
 		}catch(Exception e) {
 			logger.info("connection failed to remote system");
 		}
-		finally {
-			conn.close();
-		}
 		return status;
+	}
+
+	private Connection getMssqlConnection(String dbURL, String userName, String passWord) {
+		// TODO Auto-generated method stub
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(dbURL, userName, passWord);
+			if (conn != null) {
+				logger.info("Connected");
+			}
+		} catch (SQLException ex) {
+			logger.info("connection failed");
+		}
+		return conn;
 	}
 
 	private static List<AadharPojo> getResultedData(List<String> list, Connection conn) throws SQLException {

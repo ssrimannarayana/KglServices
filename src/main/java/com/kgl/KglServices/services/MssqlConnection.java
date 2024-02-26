@@ -39,7 +39,7 @@ public class MssqlConnection {
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
-
+		System.out.println(conn);
 		return conn;
 
 	}
